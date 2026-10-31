@@ -3,13 +3,13 @@
 [![C++ Standard](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B20)
 [![Target OS](https://img.shields.io/badge/OS-Linux%20(x86__64%20%7C%20aarch64)-orange.svg)](https://kernel.org)
 [![Security](https://img.shields.io/badge/Security-Zero--Trust%20Hardened-green.svg)](#8-zero-trust-security--hardening-architecture)
-[![Release](https://img.shields.io/badge/Release-v1.0.0-informational.svg)](RELEASE_NOTES.md)
-[![License](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
+[![Release](https://img.shields.io/badge/Release-v1.0.0-informational.svg)](https://github.com/ahbandegan/argus/releases/tag/1.0.0)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 **Argus** is a lightweight, low-overhead, and secure Linux system monitoring daemon written in **Modern C++ (C++20)**. It directly queries Linux kernel data structures (`/proc`, `/sys`, `statvfs`, `getloadavg`) and exposes instantaneous hardware, network, and socket connection audit trails through an embedded, high-throughput REST API.
 
 > [!NOTE]
-> For version details, migration notes, and changelogs, please see the **[Argus v1.0.0 Release Notes](RELEASE_NOTES.md)**.
+> For version details, migration notes, and changelogs, please see the **[Argus v1.0.0 Release Notes](https://github.com/ahbandegan/argus/releases/tag/1.0.0)**.
 
 ---
 
@@ -462,21 +462,41 @@ Argus requests only the minimal set of Linux capabilities required to function:
 
 ## 9. Automated Quickstart (`install.sh`)
 
-To deploy Argus on any supported Linux machine (Ubuntu, Debian, RHEL, CentOS, Arch, SUSE):
+Deploy and manage Argus on any supported Linux machine (Ubuntu, Debian, RHEL, CentOS, Rocky Linux, Arch, openSUSE) with a single command:
 
 ```bash
-chmod +x install.sh
-sudo ./install.sh
+sudo bash -c "$(curl -fsSL https://github.com/ahbandegan/argus/raw/main/install.sh)" @ install
 ```
 
-The script will automatically:
+### Remote Management Commands
+The installer script can also be executed remotely for routine administration:
+
+```bash
+# Check daemon status and health probe
+sudo bash -c "$(curl -fsSL https://github.com/ahbandegan/argus/raw/main/install.sh)" @ status
+
+# Update daemon to the latest release
+sudo bash -c "$(curl -fsSL https://github.com/ahbandegan/argus/raw/main/install.sh)" @ update
+
+# Show current API Bearer authentication token
+sudo bash -c "$(curl -fsSL https://github.com/ahbandegan/argus/raw/main/install.sh)" @ token
+
+# Tail live systemd service logs
+sudo bash -c "$(curl -fsSL https://github.com/ahbandegan/argus/raw/main/install.sh)" @ logs
+
+# Interactive CLI Management Menu
+sudo bash -c "$(curl -fsSL https://github.com/ahbandegan/argus/raw/main/install.sh)"
+```
+
+The installer script will automatically:
 1. Install build dependencies (`cmake`, `g++`, `git`, `openssl`).
-2. Build the binary in Release mode (`-O3 -fstack-protector-strong -D_FORTIFY_SOURCE=2 -fPIE -pie`).
-3. Create the `argus_svc` system user.
-4. Generate a 256-bit cryptographically secure token (`openssl rand -hex 32`) and save it to `/etc/argus/config.json` (chmod `600`).
-5. Install the executable to `/usr/local/bin/argus`.
-6. Install and activate the hardened `argus.service` systemd unit.
-7. Print test `curl` commands with the generated token.
+2. Clone or pull the repository (`https://github.com/ahbandegan/argus.git`).
+3. Build the binary in Release mode (`-O3 -fstack-protector-strong -D_FORTIFY_SOURCE=2 -fPIE -pie`).
+4. Create the `argus_svc` system user.
+5. Generate a 256-bit cryptographically secure token (`openssl rand -hex 32`) and save it to `/etc/argus/config.json` (chmod `600`).
+6. Install the executable to `/usr/local/bin/argus`.
+7. Register and activate the hardened `argus.service` systemd unit.
+8. Print test `curl` commands with the generated token.
 
 ---
 
@@ -490,7 +510,7 @@ The script will automatically:
 
 ### Building
 ```bash
-git clone https://github.com/argus-monitor/argus.git
+git clone https://github.com/ahbandegan/argus.git
 cd argus
 
 # Configure and compile
@@ -542,7 +562,6 @@ argus/
 ├── config.json                 # Default configuration file template
 ├── argus.service               # Production-hardened systemd service definition
 ├── install.sh                  # Automated multi-distro deployment script
-├── RELEASE_NOTES.md            # Version release notes and specifications
 ├── README.md                   # Complete architectural and operations manual
 └── src/
     ├── main.cpp                # Daemon entrypoint, signal handling, CLI parsing
