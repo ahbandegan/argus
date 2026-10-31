@@ -1,0 +1,50 @@
+# Build artifacts and compiled binaries
+build/
+bin/
+lib/
+out/
+dist/
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+argus
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+*.ninja
+.ninja_*
+_deps/
+
+# IDE and Editor configurations
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Logs and runtime artifacts
+logs/
+*.log
+*.pid
+core
+core.*
+*.stackdump
+
+# Local secrets and TLS certificates
+config.local.json
+certs/*.key
+certs/*.crt
+certs/*.pem

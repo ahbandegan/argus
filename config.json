@@ -1,0 +1,40 @@
+{
+  "server": {
+    "bind_address": "127.0.0.1",
+    "port": 9100,
+    "threads": 4,
+    "require_auth_for_health": false
+  },
+  "security": {
+    "api_token": "CHANGE_ME_GENERATE_SECURE_RANDOM_TOKEN_OR_USE_INSTALL_SH",
+    "rate_limit": {
+      "enabled": true,
+      "requests_per_minute": 120,
+      "burst_capacity": 30
+    },
+    "drop_privileges": {
+      "enabled": true,
+      "user": "argus_svc",
+      "group": "argus_svc"
+    },
+    "tls": {
+      "enabled": false,
+      "cert_file": "/etc/argus/certs/server.crt",
+      "key_file": "/etc/argus/certs/server.key"
+    }
+  },
+  "monitoring": {
+    "sample_interval_ms": 1000,
+    "connection_audit_history_size": 1000,
+    "disk_mount_filter": [
+      "/",
+      "/home",
+      "/var",
+      "/boot"
+    ]
+  },
+  "logging": {
+    "level": "INFO",
+    "log_file": "/var/log/argus/argus.log"
+  }
+}

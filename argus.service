@@ -1,0 +1,60 @@
+[Unit]
+Description=Argus - High-Performance Linux Kernel Monitoring Daemon
+Documentation=https://github.com/argus-monitor/argus
+After=network.target network-online.target time-sync.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=argus_svc
+Group=argus_svc
+
+# Executable invocation
+ExecStart=/usr/local/bin/argus --config /etc/argus/config.json
+ExecReload=/bin/kill -HUP $MAINPID
+
+# Process Lifecycle Management
+Restart=always
+RestartSec=5s
+KillMode=mixed
+TimeoutStopSec=15s
+
+# Standard Output & Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=argus
+
+# Linux Sandboxing & Systemd Hardening (Zero-Trust Model)
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictNamespaces=true
+RestrictRealtime=true
+MemoryDenyWriteExecute=true
+LockPersonality=true
+
+# Capabilities:
+# CAP_NET_BIND_SERVICE: Allow binding to privileged ports (< 1024) if needed
+# CAP_DAC_READ_SEARCH: Allow inspecting /proc/<pid>/fd symlinks across all processes for connection audit
+AmbientCapabilities=CAP_NET_BIND_SERVICE CAP_DAC_READ_SEARCH
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_DAC_READ_SEARCH
+
+# Directories and Permissions
+ConfigurationDirectory=argus
+LogsDirectory=argus
+RuntimeDirectory=argus
+
+# File System Access Limits
+ReadOnlyPaths=/proc /sys
+ReadWritePaths=/var/log/argus
+
+# File Descriptor and Resource Limits
+LimitNOFILE=65535
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target
